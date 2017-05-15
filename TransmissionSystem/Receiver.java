@@ -28,6 +28,7 @@ public class Receiver implements Device
 	{
 		this.id = id;
 		this.rand = ts.getRandObj();
+		transmissionSystem = ts;
 	}
 	
 	/**

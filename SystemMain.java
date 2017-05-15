@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.regex.*;
 
+import TransmissionSystem.StatisticsCollector;
+
 /**
  * 
  * @author Adam Pertek
@@ -44,8 +46,9 @@ public class SystemMain
 		simulation.setSimulationTime(singleTime);
 		simulation.simulate();
 		
-		TransmissionSystem.StatisticsCollector sc = simulation.getStatObj();
+		StatisticsCollector sc = simulation.getStatObj();
 		sc.printStats();
+		System.out.println("Siema");
 	}
 	
 	/**
