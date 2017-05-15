@@ -21,7 +21,7 @@ import java.util.regex.*;
 public class SystemMain
 {
 	public static void main(String[] args)
-	{	
+	{		
 		printWelcomeInfo();
 		checkNSetParams(args);
 		
@@ -40,9 +40,12 @@ public class SystemMain
 			System.out.print("OFF\n");
 		}
 		System.out.print("\n");
-		
+	
 		simulation.setSimulationTime(singleTime);
 		simulation.simulate();
+		
+		TransmissionSystem.StatisticsCollector sc = simulation.getStatObj();
+		sc.printStats();
 	}
 	
 	/**

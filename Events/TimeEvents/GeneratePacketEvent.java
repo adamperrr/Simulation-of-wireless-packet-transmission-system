@@ -20,6 +20,7 @@ public class GeneratePacketEvent implements TimeEvent
 		transmitter = trans;
 		rand = ts.getRandObj();
 		transmissionSystem = ts;
+		stat = ts.getStatObj();
 		
 		double randCGP = rand.nextCGP();
 		time = clock + randCGP;
@@ -50,7 +51,7 @@ public class GeneratePacketEvent implements TimeEvent
 	*/
 	private void action()
 	{
-		transmitter.pushPacketToBuffer(new Packet(transmitter.getId()));
+		transmitter.pushPacketToBuffer(new Packet(transmitter.getId(), time, stat));
 		System.out.println(time + ": GeneratePacketEvent: Packet pushed to the transmitter's "+ transmitter.getId() +" buffer");
 		
 		// Plan next event
@@ -64,4 +65,5 @@ public class GeneratePacketEvent implements TimeEvent
 	private Transmitter transmitter = null;
 	private RandomGenerator rand = null;
 	private TransmissionSystem transmissionSystem = null;
+	private StatisticsCollector stat = null;
 }

@@ -49,7 +49,8 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 					if(tempPacket != null){
 						channel.pushPacket(tempPacket);
 						channel.setBusy(); // Setting channel busy - listening events will see this
-											
+						tempPacket.setFirstSendTime(transmissionSystem.getClock());					
+						
 						//" + transmissionSystem.getClock() + ":
 						System.out.println("-> SendFromTransmitterEvent: Packet sent to channel from transmitter " + tempTrans.getId());
 						System.out.println("--> passTime: " + tempTrans.transmissionSettings.getPassTime());

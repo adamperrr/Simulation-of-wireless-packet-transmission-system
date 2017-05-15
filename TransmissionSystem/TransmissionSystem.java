@@ -29,7 +29,7 @@ import Generators.RandomGenerator;
 
 public class TransmissionSystem 
 {
-	/*
+	/**
 	 * Number of transmitters or receivers in the system.
 	 * */
 	public static final int NUMBER_OF_DEVICES = 6;
@@ -72,7 +72,8 @@ public class TransmissionSystem
 		
 		if(stepMode)
 		{
-			while(clock < maximumSimulationTime && !timeEvents.isEmpty()){
+			while(clock < maximumSimulationTime && !timeEvents.isEmpty())
+			{
 				if(!timeEvents.isEmpty())
 				{
 					currentTimeEvent = timeEvents.get(0);
@@ -101,8 +102,8 @@ public class TransmissionSystem
 		}
 		else
 		{
-			while(clock < maximumSimulationTime && !timeEvents.isEmpty()){
-				
+			while(clock < maximumSimulationTime && !timeEvents.isEmpty())
+			{
 				if(!timeEvents.isEmpty())
 				{
 					currentTimeEvent = timeEvents.get(0);
@@ -225,6 +226,14 @@ public class TransmissionSystem
 	}
 	
 	/**
+	 * Function returns main object of statistics collector
+	 * @returns stat - statistics collector main object
+	 * */
+	public StatisticsCollector getStatObj() {
+		return stat;
+	}
+	
+	/**
 	 * Function corrects precision of the given number
 	 * @param in
 	 * */
@@ -247,4 +256,5 @@ public class TransmissionSystem
 	
 	private boolean stepMode = false; // The step work mode
 	private double maximumSimulationTime = 400.0; // Maximum simulation time
+	private StatisticsCollector stat = new StatisticsCollector(NUMBER_OF_DEVICES);
 }

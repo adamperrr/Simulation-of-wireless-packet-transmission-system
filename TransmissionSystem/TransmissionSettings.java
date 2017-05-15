@@ -153,7 +153,6 @@ public class TransmissionSettings {
 	{
 		inc_r();
 		resetFreeChannelTime();
-		//setListeningTime( rand.nextR(r) * rand.nextCTP() );
 		passTime = rand.nextCTP();
 	}
 	

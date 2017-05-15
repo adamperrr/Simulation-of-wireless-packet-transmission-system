@@ -24,8 +24,11 @@ public class Packet
 	 * Constructor of the class Packet.
 	 * @param address - source/destination of the packet
 	 * */
-	public Packet(int address) {
+	public Packet(int address, double appiringTime, StatisticsCollector sc) {
 		this.address = address;
+		appearingInTheBufferTime = appiringTime;
+		stat = sc;
+		
 		ACK = false;
 	}
 	
@@ -80,15 +83,30 @@ public class Packet
 		correct = false;
 	}
 	
-	/*
-	 * Source/destination of the packet.
-	 * */
-	private int address = -1;
+	public void setFirstSendTime(double t)
+	{
+		firstSendTime = t;
+		double waitingTime = firstSendTime - appearingInTheBufferTime;
+		stat.addWaitingTime(waitingTime);
+	}
 	
-	/*
-	 * When correct=true packet is not faulty
-	 * correct=false - packet is faulty after collision 
-	 * */
-	private boolean correct = true;
-	private boolean ACK = false;
+	public void setArrivalToReceiverTime(double t)
+	{
+		arrivalToReceiverTime = t;
+		double PacketDelayTime = arrivalToReceiverTime - appearingInTheBufferTime;
+		stat.addPacketDelayTime(PacketDelayTime);
+	}
+	
+	
+	
+	private int address = -1; // Source/destination of the packet.
+	private boolean correct = true; // When correct=true packet is not faulty. correct=false - packet is faulty after collision 
+	private boolean ACK = false; // Is this packet an ACK
+	
+	// For statistics:
+	private double appearingInTheBufferTime = 0.0; // The time the package appears in the buffer.
+	private double firstSendTime = 0.0;
+	private double arrivalToReceiverTime = 0.0;
+
+	StatisticsCollector stat = null;
 }

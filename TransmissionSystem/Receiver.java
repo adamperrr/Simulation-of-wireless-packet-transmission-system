@@ -58,6 +58,7 @@ public class Receiver implements Device
 		{
 			setBusy();
 			setACKready();
+			packet.setArrivalToReceiverTime(transmissionSystem.getClock());
 		}
 
 		receivedPacket = packet;
@@ -116,4 +117,5 @@ public class Receiver implements Device
 	private RandomGenerator rand = null; // Object of random generator.
 	private boolean isBusy = false; // Occupancy state of the device.
 	private boolean readyACK = false; // Says when receiver should send a ACK packet
+	private TransmissionSystem transmissionSystem = null; // To get current time
 }
