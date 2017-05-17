@@ -154,6 +154,7 @@ public class TransmissionSettings {
 		inc_r();
 		resetFreeChannelTime();
 		passTime = rand.nextCTP();
+		procesedPacket.setCorrect();
 	}
 	
 	private Packet procesedPacket = null; 

@@ -20,33 +20,40 @@ import java.util.*;
  * */
 
 public class RandomGenerator
-{	// Wyk³adniczy per ndajnik i nie tym samym ziarnym wyk³adniczy
-	// Dla ka¿dej funkcji w RandomGenerator daj inne ziarno a nie dla nadajników
-	
+{	
 	/**
 	 * Constructor
 	 * @param valL lambda value
 	 * @param numOfSimulation simulation number
 	 * @param transmitterId 
 	 * */
-	public RandomGenerator(double lambda, int numOfSimulation)
+	public RandomGenerator(double lambda, int simulationId)
 	{
 		L = lambda;
-		this.numOfSimulation = numOfSimulation;
+		this.simulationId = simulationId;
+		numOfDevices = TransmissionSystem.TransmissionSystem.NUMBER_OF_DEVICES;
 		
-		ugCGP = new UniformGenerator(kernels[numOfSimulation][0]);
-		expCGP = new ExpGenerator(L, ugCGP);
-		ugCTP = new UniformGenerator(kernels[numOfSimulation][1]);
-		ugR = new UniformGenerator(kernels[numOfSimulation][2]);
+		expCGP = new ExpGenerator[numOfDevices];
+		
+		int kernel = 0;
+		for(int i = 0; i < numOfDevices; i++)
+		{
+			kernel = kernels[simulationId][i];
+			expCGP[i] = new ExpGenerator(L, new UniformGenerator(kernel));
+		}
+
+		ugCTP = new UniformGenerator(kernels[simulationId][numOfDevices]);
+		ugR = new UniformGenerator(kernels[simulationId][numOfDevices+1]);
 	}
 		
 	/**
 	 * Function returns exponential distribution random number.
 	 * Time between packets generation.
+	 * @param k - transmitter/receiver id
 	 * */
-	public double nextCGP()
+	public double nextCGP(int k)
 	{
-		return expCGP.rand();
+		return expCGP[k].rand();
 	}
 	
 	/**
@@ -92,34 +99,24 @@ public class RandomGenerator
 		return L;
 	}
 	
-	private int[][] kernels = { 
-			{1465331068, 1028724222, 730191016},
-			{1452115327, 1014712603, 127399397},
-			{1529432182, 1689457332, 769966478},
-			{631996391, 155872730, 1746847398},
-			{211050020, 2110278028, 1642577804},
-			{754061791, 1162790328, 1477995502},
-			{1597899664, 1219906847, 2137118428},
-			{734084188, 1782794748, 798451857},
-			{195798370, 1007926069, 676063154},
-			{268910487, 192316291, 667932835},
-			{1097927789, 960616877, 688960041},
-			{1411244668, 255999122, 1773032477},
-			{1346295554, 1881321630, 1586341650},
-			{1688172069, 1545582719, 2070801728},
-			{395140493, 140752266, 356390456},
-			{1321376938, 2907925, 378300445},
-			{502846175, 27392916, 1468769432},
-			{673129837, 446176432, 1859499460},
-			{538740147, 503597529, 688450497},
-			{1440842596, 125885593, 253882970}
+	private int[][] kernels = {
+			{207649607,1659031691,1925456182,244770060,1573018809,374048795,1067317268,379100918},
+			{1534895405,328059867,930696947,550111416,1151530508,1790264919,1442369702,1586370763},
+			{1447163646,1426956284,936850428,1216296359,1140341948,2139461338,1796297557,1445566448},
+			{941871529,570008600,1059843140,1253247204,1566383367,858405535,708831458,1493107616},
+			{638251813,1035628446,1360555917,1488220610,1938362674,233959241,1202854496,691883018},
+			{178083338,522545489,1887834220,843403935,1790720755,879501059,719184999,1466830881},
+			{2064555015,1498198540,1451223482,812027676,1230925877,1657881148,412449570,738521967},
+			{1318573008,1541197261,389760368,1881889379,91261302,1562529835,1510205266,1798550493},
+			{88375628,1706683789,1898709793,1506171960,1465289308,1694785199,1977005540,870623581},
+			{1925089173,1050697402,20770241,705425957,1132887024,426327460,648021312,1832336402}
 	};
 	
 	private double L = 0.0;
-	private int numOfSimulation = 0;
+	private int simulationId = 0;
+	private int numOfDevices = 0;
 	
-	private UniformGenerator ugCGP = null;
-	private ExpGenerator expCGP = null;
+	private ExpGenerator[] expCGP = null;
 	private UniformGenerator ugCTP = null;
 	private UniformGenerator ugR = null;
 }

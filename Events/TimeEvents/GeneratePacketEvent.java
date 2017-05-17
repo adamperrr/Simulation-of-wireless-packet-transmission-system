@@ -22,7 +22,7 @@ public class GeneratePacketEvent implements TimeEvent
 		transmissionSystem = ts;
 		stat = ts.getStatObj();
 		
-		double randCGP = rand.nextCGP();
+		double randCGP = rand.nextCGP(transmitter.getId());
 		time = clock + randCGP;
 	}
 

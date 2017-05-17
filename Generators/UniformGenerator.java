@@ -30,10 +30,10 @@ public class UniformGenerator
 		return kernel;
 	}
 	
-	protected int kernel = 0;
+	private int kernel = 0;
 	
-	protected double M = 2_147_483_647.0;
-	protected int A = 16_807;
-	protected int Q = 127_773;
-	protected int R = 2_836;
+	private double M = 2_147_483_647.0;
+	private int A = 16_807;
+	private int Q = 127_773;
+	private int R = 2_836;
 }

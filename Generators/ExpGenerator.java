@@ -16,6 +16,6 @@ class ExpGenerator
 		return -(1.0/lambda) * Math.log(k);
 	}
 	
-	protected double lambda = 0.0;
-	protected UniformGenerator uniGen;
+	private double lambda = 0.0;
+	private UniformGenerator uniGen;
 }
