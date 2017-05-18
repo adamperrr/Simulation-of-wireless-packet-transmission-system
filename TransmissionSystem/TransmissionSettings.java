@@ -35,7 +35,6 @@ public class TransmissionSettings {
 	public void resetAllSettings()
 	{
 		procesedPacket = null; 
-		listeningTime = 0.5;
 		r = 0;
 		freeChannelTime = 0.0;
 		passTime = rand.nextCTP();
@@ -47,6 +46,7 @@ public class TransmissionSettings {
 	 * */
 	public void setProcesedPacket(Packet packet)
 	{
+		resetAllSettings();
 		procesedPacket = packet;
 	}
 	

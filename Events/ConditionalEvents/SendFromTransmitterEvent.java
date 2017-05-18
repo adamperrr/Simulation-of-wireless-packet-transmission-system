@@ -17,6 +17,7 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 	public SendFromTransmitterEvent(TransmissionSystem ts) {
 		transmitters = ts.getTransmitters();
 		channel = ts.getChannel();
+		stat = ts.getStatObj();
 		transmissionSystem = ts;
 	}
 	
@@ -45,11 +46,19 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 				if(tempTrans != null && tempTrans.isReady())
 				{
 					Packet tempPacket = tempTrans.transmissionSettings.getProcesedPacket(); // Gets packet currently processed in the specified transmitter
+					int r = tempTrans.transmissionSettings.get_r();
 					
 					if(tempPacket != null){
 						channel.pushPacket(tempPacket);
 						channel.setBusy(); // Setting channel busy - listening events will see this
-						tempPacket.setFirstSendTime(transmissionSystem.getClock());					
+						tempPacket.setPacketFirstSendTime(transmissionSystem.getClock());	
+						stat.addTransmission();
+						if(r != 0)
+						{
+							stat.addRetransmission();
+							stat.addRejectedPacket();
+						}
+						
 						
 						//" + transmissionSystem.getClock() + ":
 						System.out.println("-> SendFromTransmitterEvent: Packet sent to channel from transmitter " + tempTrans.getId());
@@ -70,4 +79,5 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 	private Vector <Transmitter> transmitters = null; // Vectors of the transmitters in the system
 	private Channel channel = null;	// Object of the channel of the system
 	private TransmissionSystem transmissionSystem = null;
+	private StatisticsCollector stat = null;
 }

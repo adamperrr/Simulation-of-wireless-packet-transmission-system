@@ -15,6 +15,7 @@ public class ListenIfChannelIsFreeEvent implements TimeEvent
 	{
 		transmitter = trans;
 		rand = ts.getRandObj();
+		stat = ts.getStatObj();
 		transmissionSystem = ts;
 		
 		time = clock + trans.transmissionSettings.getListeningTime();
@@ -91,4 +92,5 @@ public class ListenIfChannelIsFreeEvent implements TimeEvent
 	private RandomGenerator rand = null;
 	private ArrayList<Events.TimeEvent> timeEvents = null;
 	private TransmissionSystem transmissionSystem = null;
+	private StatisticsCollector stat = null;
 }
