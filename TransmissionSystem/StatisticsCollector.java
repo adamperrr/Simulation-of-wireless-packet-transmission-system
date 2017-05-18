@@ -2,9 +2,11 @@ package TransmissionSystem;
 
 public class StatisticsCollector
 {
-	public StatisticsCollector(int numOfDevices)
+	public StatisticsCollector(int numOfDevices, TransmissionSystem ts)
 	{
 		this.numOfDevices = numOfDevices;
+		this.initialPhase = ts.getInitialPhase();
+		transmissionSystem = ts;
 	}
 	
 	public void addRejectedPacket()
@@ -22,53 +24,57 @@ public class StatisticsCollector
 		numOfAllTransmissions++;
 	}
 	
-	public void setLastDeliveryTime(double t)
+	public void setLastDeliveryTime(double t, double c)
 	{
-		if(t > lastDeliveryTime)
+		if(c > initialPhase && t > lastDeliveryTime)
 		{
 			lastDeliveryTime = t;
 		}
 	}
 	
-	public void setFirstSendTime(double t)
+	public void setFirstSendTime(double t, double c)
 	{
-		if( firstSendTime == 0.0 )
+		if( c > initialPhase && firstSendTime == 0.0 )
 		{
 			firstSendTime = t;
 		}
 	}
 	
-	public void addDeliveredPacket()
+	public void addDeliveredPacket(double c)
 	{
-		numOfDeliveredPackets++;
+		if(c > initialPhase)
+			numOfDeliveredPackets++;
 	}
 	
-	public void addPacketDelayTime(double dt)
+	public void addPacketDelayTime(double dt, double c)
 	{
-		packetDelaysSum += dt;
+		if(c > initialPhase)
+			packetDelaysSum += dt;
 	}
 	
-	public void addWaitingTime(double dt)
+	public void addWaitingTime(double dt, double c)
 	{
-		waitingTimesSum += dt;
+		if(c > initialPhase)
+			waitingTimesSum += dt;
 	}
 	
 	public double getAveragePacketError()//sumOfRejectedPackets / (dosz³y poprawnie + usuniête)
 	{
 		double k = (double) TransmissionSystem.NUMBER_OF_DEVICES;
-		averagePacketError = (double)numOfDeliveredPackets / ((double)sumOfRejectedPackets + (double)numOfDeliveredPackets) / k;
+		averagePacketError = sumOfRejectedPackets / (double) numOfAllTransmissions / (double)k;
+		//averagePacketError = (double)numOfDeliveredPackets / ((double)sumOfRejectedPackets + (double)numOfDeliveredPackets) / k;
 		return averagePacketError;
 	}
 
 	public double getAverageNumOfRetransmission()
 	{
-		averageNumOfRetransmission = (double)numOfRetransmissions / (double)numOfAllTransmissions;// nuOfRet / numOfDeliver 
+		averageNumOfRetransmission = (double)numOfRetransmissions / (double)numOfDeliveredPackets;// nuOfRet / numOfDeliver 
 		return averageNumOfRetransmission;
 	}
 
 	public double getSystemBitRate()
 	{
-		systemBitRate = (double)numOfDeliveredPackets / (lastDeliveryTime - firstSendTime);// zamiast first faza pocz¹tkowa zadana, zamiast last koniec sym
+		systemBitRate = (double)numOfDeliveredPackets / (transmissionSystem.getMaximumSimulationTime() - initialPhase);// zamiast first faza pocz¹tkowa zadana, zamiast last koniec sym
 		return systemBitRate;
 	}
 			
@@ -153,4 +159,8 @@ public class StatisticsCollector
 	private double averageWaitingToSendTime = 0.0; // Result
 	
 	private int numOfDevices = 0;
+	
+	private double initialPhase = 0.0;
+	
+	TransmissionSystem transmissionSystem = null;
 }

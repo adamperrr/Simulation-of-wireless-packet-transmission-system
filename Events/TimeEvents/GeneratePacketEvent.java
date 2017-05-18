@@ -51,7 +51,7 @@ public class GeneratePacketEvent implements TimeEvent
 	*/
 	private void action()
 	{
-		transmitter.pushPacketToBuffer(new Packet(transmitter.getId(), time, stat));
+		transmitter.pushPacketToBuffer(new Packet(transmitter.getId(), time, transmissionSystem));
 		System.out.println(time + ": GeneratePacketEvent: Packet pushed to the transmitter's "+ transmitter.getId() +" buffer");
 		
 		// Plan next event

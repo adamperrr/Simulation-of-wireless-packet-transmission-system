@@ -29,7 +29,7 @@ public class SystemMain
 				
 		for(int i = 0; i <= maxSingleSimulationNum; i++)
 		{
-			TransmissionSystem.TransmissionSystem simulation = new TransmissionSystem.TransmissionSystem(0.04, i);
+			TransmissionSystem.TransmissionSystem simulation = new TransmissionSystem.TransmissionSystem(0.04, i, initialPhase);
 			
 			System.out.println("Single simulation time: " + singleTime);
 					
@@ -121,6 +121,7 @@ public class SystemMain
 				System.out.println("\nDescription of program parameters:");
 				
 				//System.out.println("-n parameter sets number of a single simulation.\n\tDefault value equals to 0");
+				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault value equals to 200ms.");
 				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault value equals to 400ms.");
 				System.out.println("-s parameter turns on the step work mode. In order to start this mode the parameter must be equal to 1.\n\tIn default the step work mode is off.\n");
 				System.out.println("-gk parameter turns on a function which generates and displays kernels which can be used in simulation files.\n\tArguments: -gk initialKernel numOfKernels\n");
@@ -178,6 +179,16 @@ public class SystemMain
 					if(temp > 0){ singleTime = temp; }
 				}
 			}
+			else if( args[i].equals("-ip") && (i+1 < args.length) )
+			{
+				regexPattern = Pattern.compile("^\\d*$");
+				regexMatch = regexPattern.matcher(args[i+1]);
+				
+				if(regexMatch.matches()){
+					double temp = Double.parseDouble(args[i+1]);
+					if(temp > 0){ initialPhase = temp; }
+				}
+			}
 			else if( args[i].equals("-s") && (i+1 < args.length) )
 			{
 		        regexPattern = Pattern.compile("^\\d{1}$");
@@ -211,6 +222,7 @@ public class SystemMain
 		System.exit(0);
 	}
 	
+	private static double initialPhase = 200.0;
 	private static int maxSingleSimulationNum = 9;
 	private static int singleSimulationId = 0;
 	private static double singleTime = 400.0;

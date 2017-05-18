@@ -24,10 +24,11 @@ public class Packet
 	 * Constructor of the class Packet.
 	 * @param address - source/destination of the packet
 	 * */
-	public Packet(int address, double appearingTime, StatisticsCollector sc) {
+	public Packet(int address, double appearingTime, TransmissionSystem ts) {
 		this.address = address;
 		appearingInTheBufferTime = appearingTime;
-		stat = sc;
+		stat = ts.getStatObj();
+		transmissionSystem = ts;
 		
 		ACK = false;
 	}
@@ -87,17 +88,17 @@ public class Packet
 	{
 		firstSendTime = t;
 		double waitingTime = firstSendTime - appearingInTheBufferTime;
-		stat.addWaitingTime(waitingTime);
-		stat.setFirstSendTime(t);
+		stat.addWaitingTime(waitingTime, transmissionSystem.getClock());
+		stat.setFirstSendTime(t, transmissionSystem.getClock());
 	}
 	
 	public void setPacketArrivalToReceiverTime(double t)
 	{
 		arrivalToReceiverTime = t;
 		double PacketDelayTime = arrivalToReceiverTime - appearingInTheBufferTime;
-		stat.addPacketDelayTime(PacketDelayTime);
-		stat.addDeliveredPacket();
-		stat.setLastDeliveryTime(t);
+		stat.addPacketDelayTime(PacketDelayTime, transmissionSystem.getClock());
+		stat.addDeliveredPacket(transmissionSystem.getClock());
+		stat.setLastDeliveryTime(t, transmissionSystem.getClock());
 	}
 	
 	
@@ -111,5 +112,6 @@ public class Packet
 	private double firstSendTime = 0.0;
 	private double arrivalToReceiverTime = 0.0;
 
+	TransmissionSystem transmissionSystem = null;
 	StatisticsCollector stat = null;
 }

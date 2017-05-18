@@ -37,9 +37,18 @@ public class TransmissionSystem
 	/**
 	 * TransmissionSystem class constructor
 	 * */
-	public TransmissionSystem(double lambda, int simulationId)
+	public TransmissionSystem(double lambda, int simulationId, double initialPhase)
 	{	
 		rand = new Generators.RandomGenerator(lambda, simulationId);
+		
+		if(initialPhase < 0.0)
+		{
+			this.initialPhase = 0.0;
+		}
+		else
+		{
+			this.initialPhase = initialPhase;
+		}
 		
 		for(int i = 0; i < NUMBER_OF_DEVICES; i++)
 		{ // Initialization of transmitters and receivers variables
@@ -123,6 +132,22 @@ public class TransmissionSystem
 			}
 		}
 	}
+	
+	/**
+	 * Returns value of the maximum simulation time
+	 * @returns maximumSimulationTime - maximumSimulationTime value
+	 * */
+	public double getMaximumSimulationTime(){
+		return maximumSimulationTime;
+	}
+	
+	/**
+	 * Returns value of the initial phase
+	 * @returns InitialPhase - InitialPhase value
+	 * */
+	public double getInitialPhase(){
+		return initialPhase;
+	}	
 	
 	/**
 	 * Returns value of the clock
@@ -251,10 +276,11 @@ public class TransmissionSystem
 	private Vector <Receiver> receivers  = new Vector<>(NUMBER_OF_DEVICES); // Vector of receivers.
 	private Channel channel = new Channel(transmitters, receivers); // Channel object.
 	
+	private double initialPhase = 0.0;
 	private double clock = 0.0; // Clock value.
 	private Generators.RandomGenerator rand = null;
 	
 	private boolean stepMode = false; // The step work mode
 	private double maximumSimulationTime = 400.0; // Maximum simulation time
-	private StatisticsCollector stat = new StatisticsCollector(NUMBER_OF_DEVICES);
+	private StatisticsCollector stat = new StatisticsCollector(NUMBER_OF_DEVICES, this);
 }
