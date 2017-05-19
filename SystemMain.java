@@ -29,7 +29,7 @@ public class SystemMain
 				
 		for(int i = 0; i <= maxSingleSimulationNum; i++)
 		{
-			TransmissionSystem.TransmissionSystem simulation = new TransmissionSystem.TransmissionSystem(0.04, i, initialPhase);
+			TransmissionSystem.TransmissionSystem simulation = new TransmissionSystem.TransmissionSystem(lambda, i, initialPhase);
 			
 			System.out.println("Single simulation time: " + singleTime);
 					
@@ -68,7 +68,7 @@ public class SystemMain
 			averagePacketDelay += allStat[i].getAveragePacketDelay();
 			averageWaitingToSendTime += allStat[i].getAverageWaitingToSendTime();
 			
-			System.out.println("---------------------------------------------------------------");
+			System.out.println(i + ")----------------------------------------------------------");
 			System.out.println("averagePacketError: " + allStat[i].getAveragePacketError());
 			System.out.println("averageNumOfRetransmission: " + allStat[i].getAverageNumOfRetransmission());
 			System.out.println("systemBitRate: " + allStat[i].getSystemBitRate());
@@ -90,6 +90,7 @@ public class SystemMain
 		System.out.println("averagePacketDelay: " + averagePacketDelay);
 		System.out.println("averageWaitingToSendTime: " + averageWaitingToSendTime);
 		
+		System.out.println("lambda: " + lambda);
 	}
 	
 	/**
@@ -120,6 +121,7 @@ public class SystemMain
 			{
 				System.out.println("\nDescription of program parameters:");
 				
+				System.out.println("-l parameter sets value of lambda.\n\tDefault value equals to 0.01.");
 				//System.out.println("-n parameter sets number of a single simulation.\n\tDefault value equals to 0");
 				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault value equals to 200ms.");
 				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault value equals to 400ms.");
@@ -169,6 +171,16 @@ public class SystemMain
 					}
 				}
 			}*/
+			else if( args[i].equals("-l") && (i+1 < args.length) )
+			{
+				regexPattern = Pattern.compile("^[0-9]+\\.[0-9]+?$");
+				regexMatch = regexPattern.matcher(args[i+1]);
+				
+				if(regexMatch.matches()){
+					double temp = Double.parseDouble(args[i+1]);
+					if(temp > 0){ lambda = temp; }
+				}
+			}
 			else if( args[i].equals("-t") && (i+1 < args.length) )
 			{
 				regexPattern = Pattern.compile("^\\d*$");
@@ -222,6 +234,7 @@ public class SystemMain
 		System.exit(0);
 	}
 	
+	private static double lambda = 0.01;
 	private static double initialPhase = 200.0;
 	private static int maxSingleSimulationNum = 9;
 	private static int singleSimulationId = 0;

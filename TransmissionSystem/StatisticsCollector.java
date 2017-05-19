@@ -26,7 +26,7 @@ public class StatisticsCollector
 	
 	public void setLastDeliveryTime(double t, double c)
 	{
-		if(c > initialPhase && t > lastDeliveryTime)
+		if(c >= initialPhase && t > lastDeliveryTime)
 		{
 			lastDeliveryTime = t;
 		}
@@ -34,7 +34,7 @@ public class StatisticsCollector
 	
 	public void setFirstSendTime(double t, double c)
 	{
-		if( c > initialPhase && firstSendTime == 0.0 )
+		if( c >= initialPhase && firstSendTime == 0.0 )
 		{
 			firstSendTime = t;
 		}
@@ -42,26 +42,25 @@ public class StatisticsCollector
 	
 	public void addDeliveredPacket(double c)
 	{
-		if(c > initialPhase)
+		if(c >= initialPhase)
 			numOfDeliveredPackets++;
 	}
 	
 	public void addPacketDelayTime(double dt, double c)
 	{
-		if(c > initialPhase)
+		if(c >= initialPhase)
 			packetDelaysSum += dt;
 	}
 	
 	public void addWaitingTime(double dt, double c)
 	{
-		if(c > initialPhase)
+		if(c >= initialPhase)
 			waitingTimesSum += dt;
 	}
 	
 	public double getAveragePacketError()//sumOfRejectedPackets / (dosz³y poprawnie + usuniête)
 	{
-		double k = (double) TransmissionSystem.NUMBER_OF_DEVICES;
-		averagePacketError = sumOfRejectedPackets / (double) numOfAllTransmissions / (double)k;
+		averagePacketError = sumOfRejectedPackets / (double) numOfAllTransmissions / (double)numOfDevices;
 		//averagePacketError = (double)numOfDeliveredPackets / ((double)sumOfRejectedPackets + (double)numOfDeliveredPackets) / k;
 		return averagePacketError;
 	}
@@ -97,12 +96,6 @@ public class StatisticsCollector
 		getSystemBitRate();
 		getAveragePacketDelay();
 		getAverageWaitingToSendTime();
-		/*double k = (double) TransmissionSystem.NUMBER_OF_DEVICES;
-		averagePacketError = (double)numOfDeliveredPackets / (double)sumOfRejectedPackets / k;
-		averageNumOfRetransmission = (double)numOfRetransmissions / (double)numOfAllTransmissions;	
-		systemBitRate = (double)numOfDeliveredPackets / (lastDeliveryTime - firstSendTime);
-		averagePacketDelay = packetDelaysSum / (double) numOfDeliveredPackets;
-		averageWaitingToSendTime = waitingTimesSum / (double) numOfAllTransmissions;*/
 	}
 	
 	public void printStats()
