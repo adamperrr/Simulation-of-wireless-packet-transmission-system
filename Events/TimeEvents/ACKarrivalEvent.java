@@ -69,6 +69,10 @@ public class ACKarrivalEvent implements TimeEvent
 			transmitter.setFree();
 			transmitter.setNotReady();
 			channel.getBuffer().remove(i);
+			
+			Packet procesedPacket = transmitter.transmissionSettings.getProcesedPacket();
+			procesedPacket.setPacketArrivalTime(transmissionSystem.getClock());
+			
 			transmitter.transmissionSettings.resetAllSettings();
 			
 			System.out.println(time + ": ACKarrivalEvent: ACK packet arrived to the transmitter "+ packetAddress +" from the channel.");

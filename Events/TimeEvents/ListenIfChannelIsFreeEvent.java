@@ -83,6 +83,7 @@ public class ListenIfChannelIsFreeEvent implements TimeEvent
 			transmitter.transmissionSettings.resetAllSettings();
 			transmitter.setFree();
 			transmitter.setNotReady();
+			stat.incRejectedPackets(transmitter.getId(), transmissionSystem.getClock());
 		}
 	}
 	

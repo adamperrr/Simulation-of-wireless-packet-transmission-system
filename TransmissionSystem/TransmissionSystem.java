@@ -50,6 +50,8 @@ public class TransmissionSystem
 			this.initialPhase = initialPhase;
 		}
 		
+		stat = new StatisticsCollector(NUMBER_OF_DEVICES, this);
+		
 		for(int i = 0; i < NUMBER_OF_DEVICES; i++)
 		{ // Initialization of transmitters and receivers variables
 			transmitters.add(i, new Transmitter(i, this));
@@ -278,9 +280,11 @@ public class TransmissionSystem
 	
 	private double initialPhase = 0.0;
 	private double clock = 0.0; // Clock value.
-	private Generators.RandomGenerator rand = null;
+	private Generators.RandomGenerator rand = null;	
 	
 	private boolean stepMode = false; // The step work mode
 	private double maximumSimulationTime = 400.0; // Maximum simulation time
-	private StatisticsCollector stat = new StatisticsCollector(NUMBER_OF_DEVICES, this);
+	private StatisticsCollector stat = null;
+	
+
 }

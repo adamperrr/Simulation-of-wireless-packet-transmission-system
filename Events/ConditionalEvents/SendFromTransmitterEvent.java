@@ -39,8 +39,8 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 	public void execute(){
 		if(condition()){ // If there's any ready transmitter to send packet
 			Transmitter tempTrans = null;
-			for(int i = 0; i < TransmissionSystem.NUMBER_OF_DEVICES; i++){
-			// Loop looks for a ready transmitter to send packet
+			for(int i = 0; i < TransmissionSystem.NUMBER_OF_DEVICES; i++)
+			{ // Loop looks for a ready transmitter to send packet
 				
 				tempTrans = transmitters.get(i);
 				if(tempTrans != null && tempTrans.isReady())
@@ -51,15 +51,16 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 					if(tempPacket != null){
 						channel.pushPacket(tempPacket);
 						channel.setBusy(); // Setting channel busy - listening events will see this
-						tempPacket.setPacketFirstSendTime(transmissionSystem.getClock());	
-						stat.addTransmission();
-						if(r != 0)
+						
+						if(r == 0) // Primary transmission
 						{
-							stat.addRetransmission();
-							stat.addRejectedPacket();
+							tempPacket.setPacketFirstSendTime(transmissionSystem.getClock());
 						}
-						
-						
+						else // Retransmission
+						{
+							stat.addRetransmission(i, transmissionSystem.getClock());
+						}
+								
 						//" + transmissionSystem.getClock() + ":
 						System.out.println("-> SendFromTransmitterEvent: Packet sent to channel from transmitter " + tempTrans.getId());
 						System.out.println("--> passTime: " + tempTrans.transmissionSettings.getPassTime());

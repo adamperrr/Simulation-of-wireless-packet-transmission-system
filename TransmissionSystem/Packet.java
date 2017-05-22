@@ -83,35 +83,46 @@ public class Packet
 	public void setFaulty(){
 		correct = false;
 	}
+		
+/*	// Used in: Receiver
+	public void setPacketArrivalToReceiverTime(double t)
+	{
+		arrivalToReceiverTime = t;
+		double PacketDelayTime = arrivalToReceiverTime - appearingInTheBufferTime;
+		//stat.addPacketDelayTime(PacketDelayTime, transmissionSystem.getClock());
+		//stat.addDeliveredPacket(transmissionSystem.getClock());
+		//stat.setLastDeliveryTime(t, transmissionSystem.getClock());
+	}*/
 	
+	// In: ACKarrivalEvent
+	public void setPacketArrivalTime(double t)
+	{
+		arrivalToReceiverTime = t;
+		double packetDelay = arrivalToReceiverTime - appearingInTheBufferTime;
+		stat.addPacketDelayTime(packetDelay, transmissionSystem.getClock());
+		stat.incNumOfDeliveredPackets(transmissionSystem.getClock());
+		//stat.setFirstSendTime(t);
+	}
+	
+	// Used in: SendFromTransmitterEvent
 	public void setPacketFirstSendTime(double t)
 	{
 		firstSendTime = t;
 		double waitingTime = firstSendTime - appearingInTheBufferTime;
 		stat.addWaitingTime(waitingTime, transmissionSystem.getClock());
-		stat.setFirstSendTime(t, transmissionSystem.getClock());
+		stat.incPrimaryTransmitedPackets(address, transmissionSystem.getClock());
+		//stat.setFirstSendTime(t);
 	}
-	
-	public void setPacketArrivalToReceiverTime(double t)
-	{
-		arrivalToReceiverTime = t;
-		double PacketDelayTime = arrivalToReceiverTime - appearingInTheBufferTime;
-		stat.addPacketDelayTime(PacketDelayTime, transmissionSystem.getClock());
-		stat.addDeliveredPacket(transmissionSystem.getClock());
-		stat.setLastDeliveryTime(t, transmissionSystem.getClock());
-	}
-	
-	
 	
 	private int address = -1; // Source/destination of the packet.
 	private boolean correct = true; // When correct=true packet is not faulty. correct=false - packet is faulty after collision 
 	private boolean ACK = false; // Is this packet an ACK
 	
 	// For statistics:
-	private double appearingInTheBufferTime = 0.0; // The time the package appears in the buffer.
-	private double firstSendTime = 0.0;
 	private double arrivalToReceiverTime = 0.0;
-
+	private double firstSendTime = 0.0;
+	private double appearingInTheBufferTime = 0.0;
+	
 	TransmissionSystem transmissionSystem = null;
 	StatisticsCollector stat = null;
 }

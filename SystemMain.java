@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.util.regex.*;
 
@@ -62,22 +61,22 @@ public class SystemMain
 		
 		for(int i = 0; i <= maxSingleSimulationNum; i++)
 		{	
-			averagePacketError += allStat[i].getAveragePacketError();
-			averageNumOfRetransmission += allStat[i].getAverageNumOfRetransmission();
+			/*averagePacketError += allStat[i].getAveragePacketError();
+			averageNumOfRetransmission += allStat[i].getAverageNumOfRetransmissions();
 			systemBitRate += allStat[i].getSystemBitRate();
 			averagePacketDelay += allStat[i].getAveragePacketDelay();
-			averageWaitingToSendTime += allStat[i].getAverageWaitingToSendTime();
+			averageWaitingToSendTime += allStat[i].getAverageWaitingToSendTime();*/
 			
 			System.out.println(i + ")----------------------------------------------------------");
-			System.out.println("averagePacketError: " + allStat[i].getAveragePacketError());
-			System.out.println("averageNumOfRetransmission: " + allStat[i].getAverageNumOfRetransmission());
+			/*System.out.println("averagePacketError: " + allStat[i].getAveragePacketError());
+			System.out.println("averageNumOfRetransmission: " + allStat[i].getAverageNumOfRetransmissions());
 			System.out.println("systemBitRate: " + allStat[i].getSystemBitRate());
-			System.out.println("averagePacketDelay: " + allStat[i].getAveragePacketDelay());
+			System.out.println("averagePacketDelay: " + allStat[i].getAveragePacketDelay());*/
 			System.out.println("averageWaitingToSendTime: " + allStat[i].getAverageWaitingToSendTime());
 			System.out.println("---------------------------------------------------------------");
 		}
 		
-		System.out.println("Average main statistics: ");
+		/*System.out.println("Average main statistics: ");
 		averagePacketError /= (double)(maxSingleSimulationNum+1);
 		averageNumOfRetransmission /= (double)(maxSingleSimulationNum+1);
 		systemBitRate /= (double)(maxSingleSimulationNum+1);
@@ -90,7 +89,7 @@ public class SystemMain
 		System.out.println("averagePacketDelay: " + averagePacketDelay);
 		System.out.println("averageWaitingToSendTime: " + averageWaitingToSendTime);
 		
-		System.out.println("lambda: " + lambda);
+		System.out.println("lambda: " + lambda);*/
 	}
 	
 	/**
@@ -121,10 +120,10 @@ public class SystemMain
 			{
 				System.out.println("\nDescription of program parameters:");
 				
-				System.out.println("-l parameter sets value of lambda.\n\tDefault value equals to 0.01.");
+				System.out.println("-l parameter sets value of lambda.\n\tDefault value equals to 0.02.");
 				//System.out.println("-n parameter sets number of a single simulation.\n\tDefault value equals to 0");
 				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault value equals to 200ms.");
-				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault value equals to 400ms.");
+				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault value equals to 600ms.");
 				System.out.println("-s parameter turns on the step work mode. In order to start this mode the parameter must be equal to 1.\n\tIn default the step work mode is off.\n");
 				System.out.println("-gk parameter turns on a function which generates and displays kernels which can be used in simulation files.\n\tArguments: -gk initialKernel numOfKernels\n");
 				System.exit(0);
@@ -234,10 +233,10 @@ public class SystemMain
 		System.exit(0);
 	}
 	
-	private static double lambda = 0.01;
+	private static double lambda = 0.02;
 	private static double initialPhase = 200.0;
-	private static int maxSingleSimulationNum = 9;
+	private static int maxSingleSimulationNum = 1;
 	private static int singleSimulationId = 0;
-	private static double singleTime = 400.0;
+	private static double singleTime = 100000.0;
 	private static boolean stepMode = false;
 }

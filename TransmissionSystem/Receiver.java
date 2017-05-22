@@ -59,7 +59,6 @@ public class Receiver implements Device
 		{
 			setBusy();
 			setACKready();
-			packet.setPacketArrivalToReceiverTime(transmissionSystem.getClock());
 		}
 
 		receivedPacket = packet;
