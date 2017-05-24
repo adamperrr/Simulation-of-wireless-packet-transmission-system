@@ -18,7 +18,7 @@ public class ArrivalToTheReceiverEvent implements TimeEvent
 		receiver = ts.getReceivers().get(packetAddress);
 		channel = ts.getChannel();
 		
-		rand = rand = ts.getRandObj();
+		rand = ts.getRandObj();
 		
 		Transmitter tr = ts.getTransmitters().get(packetAddress);		
 		time = clock + tr.transmissionSettings.getPassTime();
@@ -27,30 +27,15 @@ public class ArrivalToTheReceiverEvent implements TimeEvent
 	}
 
 	/**
-	 * Function starting execution of event.
-	 * */		
-	public void execute()
-	{
-		time = TransmissionSystem.correctPrecision(time);
-		action();
-	}
-	
-	/**
-	 * Time getter
-	 * @returns time - time of event
-	 * */	
-	public double getTime()
-	{
-		return time;
-	}
-	
-	/*
 	 * Watches packets in the buffer of channel looking for a packet from given address
 	 * If packet is not faulty than is pushed to the receiver buffer.
 	 * Else it is removed.
 	 * 	*/
-	private void action()
+	public void execute()
 	{
+		time = TransmissionSystem.correctPrecision(time);
+
+
 		Packet arrivingPacket = null;
 		Packet tempPacket = null;
 		int i = 0;
@@ -73,11 +58,22 @@ public class ArrivalToTheReceiverEvent implements TimeEvent
 			
 			receiver.pushPacket(arrivingPacket);
 			
-			System.out.println(time + ": ArrivalToTheReceiverEvent: Packet pushed to the receiver "+ receiver.getId() +" from the channel.");
+			if(TransmissionSystem.logsON)
+			{
+				System.out.println(time + ": ArrivalToTheReceiverEvent: Packet pushed to the receiver "+ receiver.getId() +" from the channel.");
+			}
 		}
-		
 	}
 	
+	/**
+	 * Time getter
+	 * @returns time - time of event
+	 * */	
+	public double getTime()
+	{
+		return time;
+	}
+		
 	private double time = 0.0; // Time when event will be executed
 	private int packetAddress = -1; // Address of receivers and transmitters
 

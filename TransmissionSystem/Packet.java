@@ -83,37 +83,29 @@ public class Packet
 	public void setFaulty(){
 		correct = false;
 	}
-		
-/*	// Used in: Receiver
-	public void setPacketArrivalToReceiverTime(double t)
-	{
-		arrivalToReceiverTime = t;
-		double PacketDelayTime = arrivalToReceiverTime - appearingInTheBufferTime;
-		//stat.addPacketDelayTime(PacketDelayTime, transmissionSystem.getClock());
-		//stat.addDeliveredPacket(transmissionSystem.getClock());
-		//stat.setLastDeliveryTime(t, transmissionSystem.getClock());
-	}*/
-	
-	// In: ACKarrivalEvent
+			
+	// Used in: ACKarrivalEvent
 	public void setPacketArrivalTime(double t)
 	{
+		//stat.deliveredIds.add(packetId);
+		
+		stat.incNumOfDeliveredPackets(transmissionSystem.getClock());
 		arrivalToReceiverTime = t;
 		double packetDelay = arrivalToReceiverTime - appearingInTheBufferTime;
 		stat.addPacketDelayTime(packetDelay, transmissionSystem.getClock());
-		stat.incNumOfDeliveredPackets(transmissionSystem.getClock());
-		//stat.setFirstSendTime(t);
 	}
 	
 	// Used in: SendFromTransmitterEvent
 	public void setPacketFirstSendTime(double t)
 	{
+		//stat.transIds.add(packetId);
+		
+		stat.incPrimaryTransmitedPackets(address, transmissionSystem.getClock());
 		firstSendTime = t;
 		double waitingTime = firstSendTime - appearingInTheBufferTime;
 		stat.addWaitingTime(waitingTime, transmissionSystem.getClock());
-		stat.incPrimaryTransmitedPackets(address, transmissionSystem.getClock());
-		//stat.setFirstSendTime(t);
 	}
-	
+
 	private int address = -1; // Source/destination of the packet.
 	private boolean correct = true; // When correct=true packet is not faulty. correct=false - packet is faulty after collision 
 	private boolean ACK = false; // Is this packet an ACK
@@ -125,4 +117,14 @@ public class Packet
 	
 	TransmissionSystem transmissionSystem = null;
 	StatisticsCollector stat = null;
+	
+	/*public static int idGenerator = 0;
+	private static int newPacketId()
+	{
+		int temp = idGenerator;
+		++idGenerator;
+		return temp;
+	}
+	
+	public int packetId = newPacketId();*/
 }

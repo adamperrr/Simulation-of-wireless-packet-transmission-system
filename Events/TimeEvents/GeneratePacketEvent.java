@@ -27,12 +27,27 @@ public class GeneratePacketEvent implements TimeEvent
 	}
 
 	/**
-	 * Function starting execution of event.
-	 * */		
+	* Describes all of the actions made by event
+	* Function pushes packet to the buffer of transmitter specified in the variable 'transmitter'.
+	* It also generates next event of type GeneratePacketEvent and adds it to the agenda/timeEvents.
+	*/	
 	public void execute()
 	{
 		time = TransmissionSystem.correctPrecision(time);
-		action();
+
+		transmitter.pushPacketToBuffer(new Packet(transmitter.getId(), time, transmissionSystem));
+		if(TransmissionSystem.logsON)
+		{
+			System.out.println(time + ": GeneratePacketEvent: Packet pushed to the transmitter's "+ transmitter.getId() +" buffer");
+		}
+			
+		// Plan next event
+		TimeEvent temp = new GeneratePacketEvent(time, transmitter, transmissionSystem);
+		transmissionSystem.addTimeEvent(temp);
+		if(TransmissionSystem.logsON)
+		{
+			System.out.println(time + ": GeneratePacketEvent: Planned next GeneratePacketEvent for transmitter " + transmitter.getId());
+		}
 	}
 	
 	/**
@@ -42,22 +57,6 @@ public class GeneratePacketEvent implements TimeEvent
 	public double getTime()
 	{
 		return time;
-	}
-		
-	/*
-	* Describes all of the actions made by event
-	* Function pushes packet to the buffer of transmitter specified in the variable 'transmitter'.
-	* It also generates next event of type GeneratePacketEvent and adds it to the agenda/timeEvents.
-	*/
-	private void action()
-	{
-		transmitter.pushPacketToBuffer(new Packet(transmitter.getId(), time, transmissionSystem));
-		System.out.println(time + ": GeneratePacketEvent: Packet pushed to the transmitter's "+ transmitter.getId() +" buffer");
-		
-		// Plan next event
-		TimeEvent temp = new GeneratePacketEvent(time, transmitter, transmissionSystem);
-		transmissionSystem.addTimeEvent(temp);
-		System.out.println(time + ": GeneratePacketEvent: Planned next GeneratePacketEvent for transmitter " + transmitter.getId());
 	}
 	
 	private double time = 0.0; // Time when event will be executed

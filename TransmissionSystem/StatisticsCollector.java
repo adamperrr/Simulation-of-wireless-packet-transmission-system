@@ -1,5 +1,7 @@
 package TransmissionSystem;
 
+import java.util.ArrayList;
+
 public class StatisticsCollector
 {
 	public StatisticsCollector(int numOfDevices, TransmissionSystem ts)
@@ -138,6 +140,7 @@ public class StatisticsCollector
 	{
 		if(clock >= initialPhase)
 		{
+			//System.out.println("D:" + clock);
 			numOfDeliveredPackets++;
 		}
 	}
@@ -163,6 +166,7 @@ public class StatisticsCollector
 	{
 		if(clock >= initialPhase)
 		{
+			//System.out.println("T:" + clock);
 			numberOfPrimaryTransmissions[deviceId]++;
 			sumOfPrimaryTransmissions++;
 		}
@@ -205,4 +209,7 @@ public class StatisticsCollector
 	private int numOfDevices = 0;
 	private double initialPhase = 0.0;
 	TransmissionSystem transmissionSystem = null;
+	
+	//public ArrayList<Integer> transIds = new ArrayList<>();
+	//public ArrayList<Integer> deliveredIds = new ArrayList<>();
 }

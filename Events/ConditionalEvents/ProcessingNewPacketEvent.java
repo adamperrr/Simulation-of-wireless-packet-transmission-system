@@ -55,21 +55,27 @@ public class ProcessingNewPacketEvent implements ConditionalEvent{
 						int numOfPacketRetrans = tempTrans.transmissionSettings.get_r();
 						int maxRetrans = tempTrans.transmissionSettings.getLR();
 						
-						if(numOfPacketRetrans <= maxRetrans ){
+						if( numOfPacketRetrans <= maxRetrans ){
 							tempTrans.setBusy();
 							tempTrans.transmissionSettings.setProcesedPacket(tempPacket);
-							//" + transmissionSystem.getClock() + ":
-							System.out.println("-> ProcessingNewPacketEvent: Starting ProcessingNewPacket in transmitter " + tempTrans.getId());
 
+							if(TransmissionSystem.logsON)
+							{
+								System.out.println("-> ProcessingNewPacketEvent: Starting ProcessingNewPacket in transmitter " + tempTrans.getId());
+							}
+							
 							transmissionSystem.addTimeEvent(new ListenIfChannelIsFreeEvent(transmissionSystem.getClock(), tempTrans, transmissionSystem));
 						}
-						else{
+						/*else{
 							tempTrans.setFree();
 							tempTrans.setNotReady();
 							tempTrans.transmissionSettings.resetAllSettings();
-							//" + transmissionSystem.getClock() + ":
-							System.out.println("-> ProcessingNewPacketEvent: Too many retransmission attempts in the transmitter " + tempTrans.getId() + " (r > LR)." );
-						}
+
+							if(TransmissionSystem.logsON)
+							{
+								System.out.println("-> ProcessingNewPacketEvent: Too many retransmission attempts in the transmitter " + tempTrans.getId() + " (r > LR)." );
+							}
+						}*/
 						
 					}
 				}

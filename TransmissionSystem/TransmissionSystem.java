@@ -37,8 +37,9 @@ public class TransmissionSystem
 	/**
 	 * TransmissionSystem class constructor
 	 * */
-	public TransmissionSystem(double lambda, int simulationId, double initialPhase)
+	public TransmissionSystem(double lambda, int simulationId, double initialPhase, boolean logsON)
 	{	
+		this.logsON = logsON;
 		rand = new Generators.RandomGenerator(lambda, simulationId);
 		
 		if(initialPhase < 0.0)
@@ -75,8 +76,9 @@ public class TransmissionSystem
 			TimeEvent tempEv = new Events.TimeEvents.GeneratePacketEvent(clock, tempTrans, this);
 			addTimeEvent(tempEv);
 		}
-				
-		System.out.println(clock + ": Initialization of first packets generations is done");
+		
+		if(TransmissionSystem.logsON)
+			System.out.println(clock + ": Initialization of first packets generations is done");
 		
 		// Main simulation loop
 		TimeEvent currentTimeEvent = null;
@@ -286,5 +288,5 @@ public class TransmissionSystem
 	private double maximumSimulationTime = 400.0; // Maximum simulation time
 	private StatisticsCollector stat = null;
 	
-
+	public static boolean logsON = false;
 }

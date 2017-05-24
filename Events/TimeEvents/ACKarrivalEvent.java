@@ -27,29 +27,14 @@ public class ACKarrivalEvent implements TimeEvent
 	}
 
 	/**
-	 * Function starting execution of event.
-	 * */		
-	public void execute()
-	{
-		time = TransmissionSystem.correctPrecision(time);
-		action();
-	}
-	
-	/**
-	 * Time getter
-	 * @returns time - time of event
-	 * */		
-	public double getTime()
-	{
-		return time;
-	}
-	
-	/*
 	 * Event planed by SendFromTransmitterEvent
 	 * It pushes packet ACK to the proper transmitter or activates retransmission 
 	 * 	*/
-	private void action()
+	public void execute()
 	{
+		time = TransmissionSystem.correctPrecision(time);
+
+
 		Packet ACK = null;
 		int i = 0;
 		Packet tempPacket = null;
@@ -74,12 +59,17 @@ public class ACKarrivalEvent implements TimeEvent
 			procesedPacket.setPacketArrivalTime(transmissionSystem.getClock());
 			
 			transmitter.transmissionSettings.resetAllSettings();
-			
-			System.out.println(time + ": ACKarrivalEvent: ACK packet arrived to the transmitter "+ packetAddress +" from the channel.");
+			if(TransmissionSystem.logsON)
+			{
+				System.out.println(time + ": ACKarrivalEvent: ACK packet arrived to the transmitter "+ packetAddress +" from the channel.");
+			}
 		}
 		else
 		{
-			System.out.println(time + ": ACKarrivalEvent: The ACK has not arrived. There will be a retransmission attempt for the transmitter "+ packetAddress);
+			if(TransmissionSystem.logsON)
+			{
+				System.out.println(time + ": ACKarrivalEvent: The ACK has not arrived. There will be a retransmission attempt for the transmitter "+ packetAddress);
+			}
 			
 			Transmitter transmitter = transmitters.get(packetAddress);
 			transmitter.transmissionSettings.prepareForRetransmission();
@@ -90,7 +80,16 @@ public class ACKarrivalEvent implements TimeEvent
 		
 		channel.setFree();
 	}
-
+	
+	/**
+	 * Time getter
+	 * @returns time - time of event
+	 * */		
+	public double getTime()
+	{
+		return time;
+	}
+	
 	private double time = 0.0; // Time when event will be executed
 	// References to elements needed in event's action
 	private int packetAddress = -1;

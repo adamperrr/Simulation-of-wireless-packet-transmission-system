@@ -46,8 +46,11 @@ public class SendACKEvent implements ConditionalEvent{
 				{
 					Packet ACK = new Packet(r.getId(), true);
 					channel.pushPacket(ACK);
-					//" + transmissionSystem.getClock() + ":
-					System.out.println("-> SendACKEvent: ACK packet sent to channel from receiver " + r.getId());
+
+					if(TransmissionSystem.logsON)
+					{
+						System.out.println("-> SendACKEvent: ACK packet sent to channel from receiver " + r.getId());
+					}
 					
 					r.setFree();
 					r.setACKnotReady();

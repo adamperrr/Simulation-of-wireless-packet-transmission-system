@@ -46,12 +46,12 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 				if(tempTrans != null && tempTrans.isReady())
 				{
 					Packet tempPacket = tempTrans.transmissionSettings.getProcesedPacket(); // Gets packet currently processed in the specified transmitter
-					int r = tempTrans.transmissionSettings.get_r();
 					
 					if(tempPacket != null){
 						channel.pushPacket(tempPacket);
 						channel.setBusy(); // Setting channel busy - listening events will see this
 						
+						int r = tempTrans.transmissionSettings.get_r();
 						if(r == 0) // Primary transmission
 						{
 							tempPacket.setPacketFirstSendTime(transmissionSystem.getClock());
@@ -62,9 +62,11 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 						}
 								
 						//" + transmissionSystem.getClock() + ":
-						System.out.println("-> SendFromTransmitterEvent: Packet sent to channel from transmitter " + tempTrans.getId());
-						System.out.println("--> passTime: " + tempTrans.transmissionSettings.getPassTime());
-						
+						if(TransmissionSystem.logsON)
+						{
+							System.out.println("-> SendFromTransmitterEvent: Packet sent to channel from transmitter " + tempTrans.getId());
+							System.out.println("--> passTime: " + tempTrans.transmissionSettings.getPassTime());
+						}
 						transmissionSystem.addTimeEvent(new ArrivalToTheReceiverEvent(transmissionSystem.getClock(), tempPacket.getAddress(), transmissionSystem));
 						transmissionSystem.addTimeEvent(new ACKarrivalEvent(transmissionSystem.getClock(), tempPacket.getAddress(), transmissionSystem));
 						
