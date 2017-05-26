@@ -162,7 +162,7 @@ public class TransmissionSettings {
 	private double DIFS = 2.0; // The time the channel must be free to send the packet.
 	private int r = 0; // Number of retransmission
 	private double freeChannelTime = 0.0; // Sum of listening times when channel was free
-	private int LR = 15; // Maximum number of retransmissions
+	private int LR = 6; //15; // Maximum number of retransmissions
 	private double passTime = 0.0; // Time of passing the channel between transmitter and receiver.
 	// passTime is specified once while initializing by constructor.
 	private RandomGenerator rand = null; // Object of random generator.

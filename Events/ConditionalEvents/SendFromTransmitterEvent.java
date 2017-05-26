@@ -58,7 +58,11 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 						}
 						else // Retransmission
 						{
-							stat.addRetransmission(i, transmissionSystem.getClock());
+							if(r == 1)
+							{
+								stat.addPrimaryRetransmission(transmissionSystem.getClock());
+							}
+							stat.addRetransmission(transmissionSystem.getClock());
 						}
 								
 						//" + transmissionSystem.getClock() + ":

@@ -1,7 +1,5 @@
 package TransmissionSystem;
 
-import java.util.ArrayList;
-
 public class StatisticsCollector
 {
 	public StatisticsCollector(int numOfDevices, TransmissionSystem ts)
@@ -9,14 +7,12 @@ public class StatisticsCollector
 		this.numOfDevices = numOfDevices;
 		this.initialPhase = ts.getInitialPhase();
 		
-		numOfRetransmissions = new int[numOfDevices];
 		rejectedPackets = new int[numOfDevices];
 		numberOfPrimaryTransmissions = new int[numOfDevices];
 		packetError = new double[numOfDevices];
 		
 		for(int i = 0; i < numOfDevices; i++)
 		{
-			numOfRetransmissions[i] = 0;
 			rejectedPackets[i] = 0;
 			numberOfPrimaryTransmissions[i] = 0;
 			packetError[i] = 0;
@@ -29,6 +25,7 @@ public class StatisticsCollector
 	 * */	
 	public void countStatistics()
 	{
+		getMaxPacketError();
 		getAveragePacketError();
 		getAverageNumOfRetransmissions();
 		getSystemBitRate();
@@ -42,7 +39,8 @@ public class StatisticsCollector
 	public void printStats()
 	{
 		countStatistics();
-		System.out.println("\nThe average packet error rate divided by number of devices: " + averagePacketError);
+		System.out.println("\nmaxPacketError: " + maxPacketError);
+		System.out.println("The average packet error rate divided by number of devices: " + averagePacketError);
 		for(int i = 0; i < numOfDevices; i++)
 			System.out.println("\trejectedPackets[" + i + "]: " + rejectedPackets[i]);
 		System.out.print("\n");
@@ -58,9 +56,6 @@ public class StatisticsCollector
 		System.out.println("\tk: " + numOfDevices);
 
 		System.out.println("\nAverage number of retransmission of packets: " + averageNumOfRetransmissions);
-		for(int i = 0; i < numOfDevices; i++)
-			System.out.println("\tnumOfRetransmissions[" + i + "]: " + numOfRetransmissions[i]);
-
 		
 		System.out.println("\nSystem bit rate: " + systemBitRate);
 		System.out.println("\tnumOfDeliveredPackets: " + numOfDeliveredPackets);
@@ -85,6 +80,25 @@ public class StatisticsCollector
 		}
 	}
 	
+	public double getMaxPacketError()
+	{
+		getAveragePacketError();
+		
+		double max = packetError[0];
+		
+		for(double temp : packetError)
+		{
+			if(temp > max)
+			{
+				max = temp;
+			}
+		}
+		
+		maxPacketError = max;
+		
+		return maxPacketError;
+	}
+	
 	public double getAveragePacketError()
 	{
 		for(int i = 0; i < numOfDevices; i++)
@@ -102,19 +116,25 @@ public class StatisticsCollector
 	}
 //-----------------------------------------------------------------------------------
 	//In: SendFromTransmitterEvent
-	public void addRetransmission(int transId, double clock)
+	public void addPrimaryRetransmission(double clock)
 	{
 		if(clock >= initialPhase)
 		{
-			numOfRetransmissions[transId]++;
+			numOfPrimaryRetransmissions++;
+		}
+	}
+	
+	public void addRetransmission(double clock)
+	{
+		if(clock >= initialPhase)
+		{
+			numOfRetransmissions++;
 		}
 	}
 	
 	public double getAverageNumOfRetransmissions()
 	{
-		for(int ret : numOfRetransmissions)
-			averageNumOfRetransmissions += ret;
-		averageNumOfRetransmissions /= numOfDevices;
+		averageNumOfRetransmissions = (double)numOfRetransmissions / (double)numOfPrimaryRetransmissions;
 		return averageNumOfRetransmissions;
 	}
 	
@@ -183,11 +203,13 @@ public class StatisticsCollector
 	// The average packet error rate divided by number of devices:
 	private int[] rejectedPackets = null;
 	private int[] numberOfPrimaryTransmissions = null;
-	private double[] packetError = null; // Result
+	private double[] packetError = null;
+	private double maxPacketError = 0;
 	private double averagePacketError = 0.0; // Result
 	
 	// Average number of retransmission of packets:
-	private int[] numOfRetransmissions = null;
+	private int numOfRetransmissions = 0;
+	private int numOfPrimaryRetransmissions = 0;
 	private double averageNumOfRetransmissions = 0.0; // Result
 	
 	// System bit rate:

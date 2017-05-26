@@ -53,7 +53,7 @@ public class CollisionEvent implements ConditionalEvent
 		if(condition()){ // If there's collision
 			for(Packet p : channel.getBuffer())
 				p.setFaulty();
-			//" + transmissionSystem.getClock() + ":
+
 			if(TransmissionSystem.logsON)
 				System.out.println("-> CollisionEvent: Collision in the channel");
 		}

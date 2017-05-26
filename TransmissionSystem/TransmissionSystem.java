@@ -32,7 +32,7 @@ public class TransmissionSystem
 	/**
 	 * Number of transmitters or receivers in the system.
 	 * */
-	public static final int NUMBER_OF_DEVICES = 6;
+	public static final int NUMBER_OF_DEVICES = 15;//6;
 
 	/**
 	 * TransmissionSystem class constructor
