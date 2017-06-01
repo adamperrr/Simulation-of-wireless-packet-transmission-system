@@ -39,6 +39,8 @@ public class TransmissionSystem
 	 * */
 	public TransmissionSystem(double lambda, int simulationId, double initialPhase, boolean logsON)
 	{	
+		Packet.resetIDGenerator();
+		
 		this.logsON = logsON;
 		rand = new Generators.RandomGenerator(lambda, simulationId);
 		

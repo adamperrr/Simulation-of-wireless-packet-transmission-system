@@ -23,17 +23,16 @@ public class SystemMain
 {
 	public static void main(String[] args)
 	{	
-		double Xlambda = 0.0001;
-		while(Xlambda < 0.1)
-		{
-			lambda = Xlambda;
+		//double Xlambda = 0.0001;
+		//while(Xlambda < 0.1){
+		//	lambda = Xlambda;
 		TransmissionSystem.StatisticsCollector[] allStat = new TransmissionSystem.StatisticsCollector[10];
 		
 		checkNSetParams(args);
 		
 		if(!outputVersion)
 		{
-			printWelcomeInfo();
+			//printWelcomeInfo();
 		}
 		
 		int currentId = 0;
@@ -47,33 +46,33 @@ public class SystemMain
 		{
 			if(!outputVersion)
 			{
-				System.out.println("SIMULATION ID: " + currentId + "\n");
+				//System.out.println("SIMULATION ID: " + currentId + "\n");
 			}
 			
 			TransmissionSystem.TransmissionSystem simulation = new TransmissionSystem.TransmissionSystem(lambda, currentId, initialPhase, logsON);
 			
 			if(!outputVersion)
 			{
-				System.out.println("Single simulation time: " + singleTime);
+				//System.out.println("Single simulation time: " + singleTime);
 					
-				System.out.print("Step mode: ");
+				//System.out.print("Step mode: ");
 			}
 			if(stepMode)
 			{
-				System.out.print("ON - Click Enter to move to next step.\n");
+				//System.out.print("ON - Click Enter to move to next step.\n");
 				simulation.stepModeON();
 			}
 			else
 			{
 				if(!outputVersion)
 				{
-					System.out.print("OFF\n");
+					//System.out.print("OFF\n");
 				}
 			}
 			
 			if(!outputVersion)
 			{
-				System.out.print("\n");
+				//System.out.print("\n");
 			}
 			
 			simulation.setSimulationTime(singleTime);
@@ -83,9 +82,10 @@ public class SystemMain
 			
 			if(!outputVersion)
 			{
-				allStat[currentId].printStats();
-				System.out.println("---------------------------------------------------------------");	
-				System.out.println("--------------------------------------------------------------- \n");
+				//allStat[currentId].printStats();
+				allStat[currentId].countStatistics();
+				//System.out.println("---------------------------------------------------------------");	
+				//System.out.println("--------------------------------------------------------------- \n");
 			}
 		}
 		
@@ -98,6 +98,9 @@ public class SystemMain
 			double averagePacketDelay = 0.0;
 			double averageWaitingToSendTime = 0.0;
 			
+			int amou = allStat[0].amountOfElementsInList;
+			double[] avDelay = new double[ amou ];
+						
 			for(int i = 0; i <= maxSingleSimulationId; i++)
 			{	
 				averagePacketError += allStat[i].getAveragePacketError();
@@ -106,6 +109,11 @@ public class SystemMain
 				systemBitRate += allStat[i].getSystemBitRate();
 				averagePacketDelay += allStat[i].getAverageDelayOfThePacket();
 				averageWaitingToSendTime += allStat[i].getAverageWaitingToSendTime();
+				
+				for(int j = 0; j < amou; j++ )
+				{
+					avDelay[j] += allStat[i].avDelay[j];
+				}
 			}
 			
 			averagePacketError /= (double)(maxSingleSimulationId+1);
@@ -115,16 +123,37 @@ public class SystemMain
 			averagePacketDelay /= (double)(maxSingleSimulationId+1);
 			averageWaitingToSendTime /= (double)(maxSingleSimulationId+1);
 			
+			for(int j = 0; j < amou; j++ )
+			{
+				avDelay[j] /= (double)(maxSingleSimulationId+1);
+			}
+			
 			if(!outputVersion)
 			{
-				System.out.println("Average main statistics: ");
+				/*System.out.println("Average main statistics: ");
 				System.out.println("lambda: " + lambda);
 				System.out.println("averagePacketError: " + averagePacketError);
 				System.out.println("maxPacketError: " + maxPacketError);
 				System.out.println("averageNumOfRetransmission: " + averageNumOfRetransmission);
 				System.out.println("systemBitRate: " + systemBitRate);
 				System.out.println("averagePacketDelay: " + averagePacketDelay);
-				System.out.println("averageWaitingToSendTime: " + averageWaitingToSendTime);
+				System.out.println("averageWaitingToSendTime: " + averageWaitingToSendTime);*/
+				
+				System.out.println("\n%lambda: " + lambda);
+				System.out.println("%amou: " + amou);
+				System.out.print("y = [");
+				for(int i = 0; i < amou; i++)
+				{
+					System.out.format(Locale.US, "%.6f, ", avDelay[i]);
+				}
+				System.out.println("]; ");
+				
+				System.out.print("x = [");
+				for(int i = 0; i < amou; i++)
+				{
+					System.out.print(i + ", ");
+				}
+				System.out.println("]; ");
 			}
 			else
 			{
@@ -137,8 +166,8 @@ public class SystemMain
 				System.out.println(";");
 			}
 		}
-		Xlambda += 0.0001;
-		}
+		//Xlambda += 0.0001;
+		//}
 	}
 	
 	/**

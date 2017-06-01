@@ -1,5 +1,7 @@
 package TransmissionSystem;
 
+import java.util.*;
+
 public class StatisticsCollector
 {
 	public StatisticsCollector(int numOfDevices, TransmissionSystem ts)
@@ -10,7 +12,7 @@ public class StatisticsCollector
 		rejectedPackets = new int[numOfDevices];
 		numberOfPrimaryTransmissions = new int[numOfDevices];
 		packetError = new double[numOfDevices];
-		
+				
 		for(int i = 0; i < numOfDevices; i++)
 		{
 			rejectedPackets[i] = 0;
@@ -69,6 +71,22 @@ public class StatisticsCollector
 		System.out.println("\nAverage waiting to send time: " + averageWaitingToSendTime);
 		System.out.println("\twaitingTimesSum: " + waitingTimesSum);
 		System.out.println("\tnumberOfPrimaryTransmissions: " + sumOfPrimaryTransmissions);
+		
+		System.out.print("y = [");
+		for(int i = 0; i < amountOfElementsInList; i++)
+		{
+			System.out.format(Locale.US, "%.4f, ", avDelay[i]);
+		}
+		System.out.println("]; ");
+		
+		System.out.print("x = [");
+		for(int i = 0; i < amountOfElementsInList; i++)
+		{
+			System.out.print(i + ", ");
+		}
+		System.out.println("]; ");
+		
+		System.out.print("\n");
 	}
 	
 	// In: ListenIfChannelIsFreeEvent
@@ -134,10 +152,14 @@ public class StatisticsCollector
 	
 	public double getAverageNumOfRetransmissions()
 	{
-		averageNumOfRetransmissions = (double)numOfRetransmissions / (double)numOfPrimaryRetransmissions;
+		averageNumOfRetransmissions = 0.0;
+		if(numOfPrimaryRetransmissions != 0.0)
+		{
+			averageNumOfRetransmissions = (double)numOfRetransmissions / (double)numOfPrimaryRetransmissions;
+		}
 		return averageNumOfRetransmissions;
 	}
-	
+
 //-----------------------------------------------------------------------------------		
 	public double getSystemBitRate()
 	{
@@ -147,11 +169,18 @@ public class StatisticsCollector
 	}
 //-----------------------------------------------------------------------------------	
 	// In: Packet
-	public void addPacketDelayTime(double dt, double clock)
+	public void addPacketDelayTime(double dt, double clock, int index)
 	{
 		if(clock >= initialPhase)
 		{
 			packetDelaysSum += dt;
+			
+			if(amountOfElementsInList < maxEl)
+			{
+				if(index < maxEl)
+					avDelay[index] = dt;//getAverageDelayOfThePacket();
+				amountOfElementsInList++;
+			}
 		}
 	}
 		
@@ -232,6 +261,8 @@ public class StatisticsCollector
 	private double initialPhase = 0.0;
 	TransmissionSystem transmissionSystem = null;
 	
-	//public ArrayList<Integer> transIds = new ArrayList<>();
-	//public ArrayList<Integer> deliveredIds = new ArrayList<>();
+	public int amountOfElementsInList = 0;
+	int maxEl = 2000;
+	public double[] avDelay = new double[maxEl];
+
 }

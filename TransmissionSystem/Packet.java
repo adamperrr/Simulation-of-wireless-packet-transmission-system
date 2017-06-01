@@ -31,11 +31,15 @@ public class Packet
 		transmissionSystem = ts;
 		
 		ACK = false;
+		
+		packetId = newId(ACK);
 	}
 	
 	public Packet(int address, boolean isACK){
 		this.address = address;
 		ACK = isACK;
+		
+		packetId = newId(ACK);
 	}
 		
 	/**
@@ -92,7 +96,7 @@ public class Packet
 		stat.incNumOfDeliveredPackets(transmissionSystem.getClock());
 		arrivalToReceiverTime = t;
 		double packetDelay = arrivalToReceiverTime - appearingInTheBufferTime;
-		stat.addPacketDelayTime(packetDelay, transmissionSystem.getClock());
+		stat.addPacketDelayTime(packetDelay, transmissionSystem.getClock(), packetId);
 	}
 	
 	// Used in: SendFromTransmitterEvent
@@ -106,6 +110,28 @@ public class Packet
 		stat.addWaitingTime(waitingTime, transmissionSystem.getClock());
 	}
 
+	public int getPacketId()
+	{
+		return packetId;
+	}
+	
+	public static void resetIDGenerator()
+	{
+		idGenerator = 0;
+	}
+	
+	private static int newId(boolean ACK)
+	{
+		if(!ACK)
+		{
+			return idGenerator++;
+		}
+		else
+		{
+			return idGenerator;
+		}
+	}
+	
 	private int address = -1; // Source/destination of the packet.
 	private boolean correct = true; // When correct=true packet is not faulty. correct=false - packet is faulty after collision 
 	private boolean ACK = false; // Is this packet an ACK
@@ -118,13 +144,6 @@ public class Packet
 	TransmissionSystem transmissionSystem = null;
 	StatisticsCollector stat = null;
 	
-	/*public static int idGenerator = 0;
-	private static int newPacketId()
-	{
-		int temp = idGenerator;
-		++idGenerator;
-		return temp;
-	}
-	
-	public int packetId = newPacketId();*/
+	private static int idGenerator = 1;
+	private int packetId = -1;
 }
