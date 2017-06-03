@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -32,47 +30,47 @@ public class SystemMain
 		
 		if(!outputVersion)
 		{
-			//printWelcomeInfo();
+			printWelcomeInfo();
 		}
 		
 		int currentId = 0;
 		if(singleSimulationON)
 		{
-			currentId = singleSimulationId;
-			maxSingleSimulationId = singleSimulationId;
+			currentId = currentSimulationId;
+			lastSimulationId = currentSimulationId;
 		}
 		
-		for(; currentId <= maxSingleSimulationId; currentId++)
+		for(; currentId <= lastSimulationId; currentId++)
 		{
 			if(!outputVersion)
 			{
-				//System.out.println("SIMULATION ID: " + currentId + "\n");
+				System.out.println("SIMULATION ID: " + currentId + "\n");
 			}
 			
 			TransmissionSystem.TransmissionSystem simulation = new TransmissionSystem.TransmissionSystem(lambda, currentId, initialPhase, logsON);
 			
 			if(!outputVersion)
 			{
-				//System.out.println("Single simulation time: " + singleTime);
+				System.out.println("Single simulation time: " + singleTime);
 					
-				//System.out.print("Step mode: ");
+				System.out.print("Step mode: ");
 			}
 			if(stepMode)
 			{
-				//System.out.print("ON - Click Enter to move to next step.\n");
+				System.out.print("ON - Click Enter to move to next step.\n");
 				simulation.stepModeON();
 			}
 			else
 			{
 				if(!outputVersion)
 				{
-					//System.out.print("OFF\n");
+					System.out.print("OFF\n");
 				}
 			}
 			
 			if(!outputVersion)
 			{
-				//System.out.print("\n");
+				System.out.print("\n");
 			}
 			
 			simulation.setSimulationTime(singleTime);
@@ -82,10 +80,10 @@ public class SystemMain
 			
 			if(!outputVersion)
 			{
-				//allStat[currentId].printStats();
+				allStat[currentId].printStats();
 				allStat[currentId].countStatistics();
-				//System.out.println("---------------------------------------------------------------");	
-				//System.out.println("--------------------------------------------------------------- \n");
+				System.out.println("---------------------------------------------------------------");	
+				System.out.println("--------------------------------------------------------------- \n");
 			}
 		}
 		
@@ -98,10 +96,10 @@ public class SystemMain
 			double averagePacketDelay = 0.0;
 			double averageWaitingToSendTime = 0.0;
 			
-			int amou = allStat[0].amountOfElementsInList;
-			double[] avDelay = new double[ amou ];
+			int amountOfDelays = allStat[0].amountOfElementsInAvDelayList;
+			double[] avDelay = new double[ amountOfDelays ];
 						
-			for(int i = 0; i <= maxSingleSimulationId; i++)
+			for(int i = 0; i <= lastSimulationId; i++)
 			{	
 				averagePacketError += allStat[i].getAveragePacketError();
 				maxPacketError += allStat[i].getMaxPacketError();
@@ -110,46 +108,46 @@ public class SystemMain
 				averagePacketDelay += allStat[i].getAverageDelayOfThePacket();
 				averageWaitingToSendTime += allStat[i].getAverageWaitingToSendTime();
 				
-				for(int j = 0; j < amou; j++ )
+				for(int j = 0; j < amountOfDelays; j++ )
 				{
 					avDelay[j] += allStat[i].avDelay[j];
 				}
 			}
 			
-			averagePacketError /= (double)(maxSingleSimulationId+1);
-			maxPacketError /= (double)(maxSingleSimulationId+1);
-			averageNumOfRetransmission /= (double)(maxSingleSimulationId+1);
-			systemBitRate /= (double)(maxSingleSimulationId+1);
-			averagePacketDelay /= (double)(maxSingleSimulationId+1);
-			averageWaitingToSendTime /= (double)(maxSingleSimulationId+1);
+			averagePacketError /= (double)(lastSimulationId+1);
+			maxPacketError /= (double)(lastSimulationId+1);
+			averageNumOfRetransmission /= (double)(lastSimulationId+1);
+			systemBitRate /= (double)(lastSimulationId+1);
+			averagePacketDelay /= (double)(lastSimulationId+1);
+			averageWaitingToSendTime /= (double)(lastSimulationId+1);
 			
-			for(int j = 0; j < amou; j++ )
+			for(int j = 0; j < amountOfDelays; j++ )
 			{
-				avDelay[j] /= (double)(maxSingleSimulationId+1);
+				avDelay[j] /= (double)(lastSimulationId+1);
 			}
 			
 			if(!outputVersion)
 			{
-				/*System.out.println("Average main statistics: ");
+				System.out.println("Average main statistics: ");
 				System.out.println("lambda: " + lambda);
 				System.out.println("averagePacketError: " + averagePacketError);
 				System.out.println("maxPacketError: " + maxPacketError);
 				System.out.println("averageNumOfRetransmission: " + averageNumOfRetransmission);
 				System.out.println("systemBitRate: " + systemBitRate);
 				System.out.println("averagePacketDelay: " + averagePacketDelay);
-				System.out.println("averageWaitingToSendTime: " + averageWaitingToSendTime);*/
+				System.out.println("averageWaitingToSendTime: " + averageWaitingToSendTime);
 				
-				System.out.println("\n%lambda: " + lambda);
-				System.out.println("%amou: " + amou);
+				System.out.println("\nlambda: " + lambda);
+				System.out.println("amountOfDelays: " + amountOfDelays);
 				System.out.print("y = [");
-				for(int i = 0; i < amou; i++)
+				for(int i = 0; i < amountOfDelays; i++)
 				{
 					System.out.format(Locale.US, "%.6f, ", avDelay[i]);
 				}
 				System.out.println("]; ");
 				
 				System.out.print("x = [");
-				for(int i = 0; i < amou; i++)
+				for(int i = 0; i < amountOfDelays; i++)
 				{
 					System.out.print(i + ", ");
 				}
@@ -157,13 +155,31 @@ public class SystemMain
 			}
 			else
 			{
+				System.out.print("% ");
 				System.out.format("%.4f ", lambda);
 				System.out.format("%.4f ", averagePacketError);
 				System.out.format("%.4f ", averageNumOfRetransmission);
 				System.out.format("%.4f ", systemBitRate);
 				System.out.format("%.4f ", averagePacketDelay);
-				System.out.format("%.4f ", averageWaitingToSendTime);
+				System.out.format("%.4f", averageWaitingToSendTime);
 				System.out.println(";");
+				
+				System.out.println("\n%lambda: " + lambda);
+				System.out.println("%amountOfDelays: " + amountOfDelays);
+				System.out.print("y = [");
+				for(int i = 0; i < amountOfDelays; i++)
+				{
+					System.out.format(Locale.US, "%.6f, ", avDelay[i]);
+				}
+				System.out.println("]; ");
+				
+				System.out.print("x = [");
+				for(int i = 0; i < amountOfDelays; i++)
+				{
+					System.out.print(i + ", ");
+				}
+				System.out.println("]; ");
+				System.out.println("plot(x,y); hold on;");
 			}
 		}
 		//Xlambda += 0.0001;
@@ -189,7 +205,7 @@ public class SystemMain
 	 * */
 	public static void checkNSetParams(String[] args)
 	{
-        Pattern regexPattern;
+		Pattern regexPattern;
         Matcher regexMatch;
 		
 		for(int i = 0; i < args.length; i++)
@@ -198,13 +214,13 @@ public class SystemMain
 			{
 				System.out.println("\nDescription of program parameters:");
 				
-				System.out.println("-output parameter turns the output mode on.\n\tDefault: OFF\n\tOutput:");
+				System.out.println("-output parameter turns the output mode on.\n\tDefault: OFF\n\t");
 				System.out.println("-log parameter turns logs on.\n\tDefault: OFF");
-				System.out.println("-lam parameter sets value of lambda.\n\tDefault: 0.02");
+				System.out.println("-lam parameter sets value of lambda.\n\tDefault: 0.015");
 				System.out.println("-n parameter turns a single simulation of specified number on.");
-				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault: 200ms");
-				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault: 1000ms");
-				System.out.println("-sm parameter turns on the step work mode. In order to start this mode the parameter must be equal to 1.\n\tDefault: OFF\n");
+				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault: 0ms");
+				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault: 60000ms");
+				System.out.println("-sm parameter turns on the step work mode.\n\tDefault: OFF\n");
 				System.out.println("-gk parameter turns on a function which generates and displays kernels which can be used in simulation files.\n\tArguments: -gk initialKernel numOfKernels\n");
 				System.exit(0);
 			}
@@ -248,9 +264,9 @@ public class SystemMain
 				
 				if(regexMatch.matches()){
 					int temp = Integer.parseInt(args[i+1]);
-					if(temp >= 0 && temp <= maxSingleSimulationId)
+					if(temp >= 0 && temp <= lastSimulationId)
 					{ 
-						singleSimulationId = temp;
+						currentSimulationId = temp;
 						singleSimulationON = true;
 					}else
 					{
@@ -289,7 +305,7 @@ public class SystemMain
 					if(temp > 0){ initialPhase = temp; }
 				}
 			}
-			else if( args[i].equals("-sm"))
+			else if(args[i].equals("-sm"))
 			{		
 				logsON = true;
 				stepMode = true;
@@ -323,14 +339,14 @@ public class SystemMain
 	
 	private static double lambda = 0.015;
 	private static double initialPhase = 0.0;
-	private static int maxSingleSimulationId = 9;
+	private static int lastSimulationId = 9;
 	
-	private static int singleSimulationId = 0;
+	private static int currentSimulationId = 0;
 	private static boolean singleSimulationON = false;
 	
 	private static boolean logsON = false;
 	private static boolean outputVersion = false;
 	
-	private static double singleTime = 60000.0;
+	private static double singleTime = 60_000.0;
 	private static boolean stepMode = false;
 }

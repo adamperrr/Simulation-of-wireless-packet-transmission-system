@@ -72,7 +72,7 @@ public class StatisticsCollector
 		System.out.println("\twaitingTimesSum: " + waitingTimesSum);
 		System.out.println("\tnumberOfPrimaryTransmissions: " + sumOfPrimaryTransmissions);
 		
-		System.out.print("y = [");
+		/*System.out.print("y = [");
 		for(int i = 0; i < amountOfElementsInList; i++)
 		{
 			System.out.format(Locale.US, "%.4f, ", avDelay[i]);
@@ -84,7 +84,7 @@ public class StatisticsCollector
 		{
 			System.out.print(i + ", ");
 		}
-		System.out.println("]; ");
+		System.out.println("]; ");*/
 		
 		System.out.print("\n");
 	}
@@ -175,11 +175,11 @@ public class StatisticsCollector
 		{
 			packetDelaysSum += dt;
 			
-			if(amountOfElementsInList < maxEl)
+			if(amountOfElementsInAvDelayList < maxAmountDelays)
 			{
-				if(index < maxEl)
+				if(index < maxAmountDelays)
 					avDelay[index] = dt;//getAverageDelayOfThePacket();
-				amountOfElementsInList++;
+				amountOfElementsInAvDelayList++;
 			}
 		}
 	}
@@ -261,8 +261,8 @@ public class StatisticsCollector
 	private double initialPhase = 0.0;
 	TransmissionSystem transmissionSystem = null;
 	
-	public int amountOfElementsInList = 0;
-	int maxEl = 2000;
-	public double[] avDelay = new double[maxEl];
+	public int amountOfElementsInAvDelayList = 0;
+	int maxAmountDelays = 500;//2000;
+	public double[] avDelay = new double[maxAmountDelays];
 
 }
