@@ -60,7 +60,7 @@ public class SendFromTransmitterEvent implements ConditionalEvent{
 						{
 							if(r == 1)
 							{
-								stat.addPrimaryRetransmission(transmissionSystem.getClock());
+								stat.addPrimaryRetransmission(tempPacket.getAddress(), transmissionSystem.getClock());
 							}
 							stat.addRetransmission(transmissionSystem.getClock());
 						}

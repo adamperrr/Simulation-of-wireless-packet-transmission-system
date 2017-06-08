@@ -104,6 +104,7 @@ public class TransmissionSystem
 							conditionalEvents.get(i).execute();
 						}
 					}
+					//stat.printStats2();
 				}
 				
 				System.out.println("---------------------------------------------------------------");
@@ -133,7 +134,8 @@ public class TransmissionSystem
 						{
 							conditionalEvents.get(i).execute();
 						}
-					}					
+					}
+					stat.printStats2();
 				}
 			}
 		}

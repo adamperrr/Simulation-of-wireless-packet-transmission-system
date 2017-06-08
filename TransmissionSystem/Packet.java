@@ -98,8 +98,8 @@ public class Packet
 		double packetDelay = arrivalToReceiverTime - appearingInTheBufferTime;
 		stat.addPacketDelayTime(packetDelay, transmissionSystem.getClock(), packetId);
 		
-		//if(packetId == 10)
-			//System.out.println("Packet 10 arrived - time: " + transmissionSystem.getClock());
+		//if(packetId == 7)
+			//System.out.println("Packet 7 arrived - time: " + transmissionSystem.getClock());
 	}
 	
 	// Used in: SendFromTransmitterEvent

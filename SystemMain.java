@@ -21,9 +21,11 @@ public class SystemMain
 {
 	public static void main(String[] args)
 	{	
-		//double Xlambda = 0.0001;
+		//double Xlambda = 0.0027;
 		//while(Xlambda < 0.1){
-		//	lambda = Xlambda;
+		//       double Xlambda = 0.0036;
+		//while(Xlambda <= 0.0047){
+		//lambda = Xlambda;
 		TransmissionSystem.StatisticsCollector[] allStat = new TransmissionSystem.StatisticsCollector[10];
 		
 		checkNSetParams(args);
@@ -158,10 +160,11 @@ public class SystemMain
 				System.out.print("% ");
 				System.out.format("%.4f ", lambda);
 				System.out.format("%.4f ", averagePacketError);
+				System.out.format("%.4f ", maxPacketError);
 				System.out.format("%.4f ", averageNumOfRetransmission);
 				System.out.format("%.4f ", systemBitRate);
 				System.out.format("%.4f ", averagePacketDelay);
-				System.out.format("%.4f", averageWaitingToSendTime);
+				System.out.format("%.4f ", averageWaitingToSendTime);
 				System.out.println(";");
 				
 				System.out.println("\n%lambda: " + lambda);
@@ -183,6 +186,7 @@ public class SystemMain
 			}
 		}
 		//Xlambda += 0.0001;
+		//      Xlambda += 0.000001;
 		//}
 	}
 	
@@ -216,10 +220,10 @@ public class SystemMain
 				
 				System.out.println("-output parameter turns the output mode on.\n\tDefault: OFF\n\t");
 				System.out.println("-log parameter turns logs on.\n\tDefault: OFF");
-				System.out.println("-lam parameter sets value of lambda.\n\tDefault: 0.015");
+				System.out.println("-lam parameter sets value of lambda.\n\tDefault: " + lambda);
 				System.out.println("-n parameter turns a single simulation of specified number on.");
-				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault: 0ms");
-				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault: 60000ms");
+				System.out.println("-ip parameter sets initial phase time (in ms) of a simulation.\n\tDefault: " + initialPhase + "ms");
+				System.out.println("-t parameter sets time (in ms) of a single simulation.\n\tDefault: " + singleTime + "ms");
 				System.out.println("-sm parameter turns on the step work mode.\n\tDefault: OFF\n");
 				System.out.println("-gk parameter turns on a function which generates and displays kernels which can be used in simulation files.\n\tArguments: -gk initialKernel numOfKernels\n");
 				System.exit(0);
@@ -337,8 +341,8 @@ public class SystemMain
 		System.exit(0);
 	}
 	
-	private static double lambda = 0.015;
-	private static double initialPhase = 0.0;
+	private static double lambda = 0.0037;
+	private static double initialPhase = 157.0;
 	private static int lastSimulationId = 9;
 	
 	private static int currentSimulationId = 0;
