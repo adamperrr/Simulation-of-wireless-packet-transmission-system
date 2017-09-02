@@ -11,15 +11,16 @@ package Events;
 
 /**
  * Interface of conditional event
- * */
-public interface ConditionalEvent {
-	/**
-	 * Conditions which should return true to execute event
-	 * */			
-	boolean condition();
-	
-	/**
-	 * Execution of Event
-	 * */	
-	void execute();
+ */
+public interface ConditionalEvent
+{
+  /**
+   * Conditions which should return true to execute event
+   */
+  boolean condition();
+
+  /**
+   * Execution of Event
+   */
+  void execute();
 }

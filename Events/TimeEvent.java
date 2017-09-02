@@ -11,21 +11,23 @@ package Events;
 
 /**
  * Interface of time event
- * */
-public interface TimeEvent{
-	/**
-	 * Clock time when event should be called.
-	 * */		
-	void execute();
-	
-	/**
-	 * Time getter
-	 * @returns time - time of event
-	 * */	
-	double getTime();
-		
-	/**
-	 * Clock time when event should be called.
-	 * */	
-	double time = 0.0;
+ */
+public interface TimeEvent
+{
+  /**
+   * Clock time when event should be called.
+   */
+  void execute();
+
+  /**
+   * Time getter
+   * 
+   * @returns time - time of event
+   */
+  double getTime();
+
+  /**
+   * Clock time when event should be called.
+   */
+  double time = 0.0;
 }
